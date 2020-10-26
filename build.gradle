@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group 'org.sftpjschwrapper'
+version '1.0'
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'com.jcraft', name: 'jsch', version: '0.1.55'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.30'
+    implementation group: 'commons-pool', name: 'commons-pool', version: '1.6'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+}
