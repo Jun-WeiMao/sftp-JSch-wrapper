@@ -37,7 +37,7 @@ Javadoc is coming soon.
     Map<String, String> configMap = new HashMap<String, String>();
     configMap.put("StrictHostKeyChecking", "No");
 
-    ServerDetails details = new ServerDetails("remoteHost", port, timeout, "username", "password", config);
+    ServerDetails details = new ServerDetails("remoteHost", port, timeout, "username", "password", configMap);
 ```
 
 ### Init session pool
