@@ -18,14 +18,14 @@ public class SessionFactory extends BaseKeyedPoolableObjectFactory<ServerDetails
             if (knowHost != null && !knowHost.isEmpty()) {
                 jsch.setKnownHosts(knowHost);
             }
-            session = jsch.getSession(key.getUsername(), key.getRemoteHost(), Integer.parseInt(key.getPort()));
+            session = jsch.getSession(key.getUsername(), key.getRemoteHost(), key.getPort());
             Map<String, String> config = key.getConfig();
             if (config != null && !config.isEmpty()) {
                 for (Map.Entry<String, String> entry : config.entrySet()) {
                     session.setConfig(entry.getKey(), entry.getValue());
                 }
             }
-            session.setTimeout(Integer.parseInt(key.getTimeout()));
+            session.setTimeout(key.getTimeout());
             session.setPassword(key.getPassword());
             session.connect();
         } catch (Exception e) {

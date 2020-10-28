@@ -79,24 +79,24 @@ public class SFTPResult {
     public String toString() {
         ActionType[] transFilesType = {ActionType.downloadFile, ActionType.batchDownloadFiles, ActionType.uploadFile, ActionType.batchUploadFiles};
         String transFiles = "\n" +
-                "[     Action]:" + actionType.name() + "\n" +
-                "[Trans. flow]:" + sourcePath + " => " + destPath + "\n" +
-                "[     Result]:" + (success ? "SUCCESS" : "FAIL") + "\n" +
-                "[  Error msg]:" + (errMsg != null ? errMsg : "");
+                "[     Action] " + actionType.name() + "\n" +
+                "[Trans. flow] " + sourcePath + " => " + destPath + "\n" +
+                "[     Result] " + (success ? "SUCCESS" : "FAIL") + "\n" +
+                "[  Error msg] " + (errMsg != null ? errMsg : "");
 
         ActionType[] execCmdType = {ActionType.changeOwner, ActionType.changeMode, ActionType.makeDirectories};
         String execCmd = "\n" +
-                "[     Action]:" + actionType.name() + "\n" +
-                "[Cmd. target]:" + command + " " + destPath + "\n" +
-                "[     Result]:" + (success ? "SUCCESS" : "FAIL") + "\n" +
-                "[  Error msg]:" + (errMsg != null ? errMsg : "");
+                "[     Action] " + actionType.name() + "\n" +
+                "[Cmd. target] " + command + " " + destPath + "\n" +
+                "[     Result] " + (success ? "SUCCESS" : "FAIL") + "\n" +
+                "[  Error msg] " + (errMsg != null ? errMsg : "");
 
         if (in(transFilesType, actionType)) {
             return transFiles;
         } else if (in(execCmdType, actionType)) {
             return execCmd;
         } else {
-            return "[Default]:" + actionType.name() +
+            return "[Default] " + actionType.name() +
                     (command == null ? "" : ", Cmd. target:" + command) +
                     (destPath == null ? "" : ", Target path:" + destPath) +
                     ", Result:" + (success ? "SUCCESS" : "FAIL") +

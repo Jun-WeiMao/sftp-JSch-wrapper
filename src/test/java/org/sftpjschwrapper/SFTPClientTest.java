@@ -33,25 +33,16 @@ public class SFTPClientTest {
             is = SFTPClientTest.class.getClassLoader().getResourceAsStream("test.properties");
             prop.load(is);
 
-            details = new ServerDetails();
             Map<String, String> configMap = new HashMap<String, String>();
-            details.setRemoteHost(prop.getProperty("remoteHost"));
-            details.setPort(prop.getProperty("port"));
-            details.setUsername(prop.getProperty("username"));
-            details.setPassword(prop.getProperty("password"));
-            details.setTimeout(prop.getProperty("timeout"));
-
             String configArr = prop.getProperty("config");
             if (configArr != null && !configArr.isEmpty()) {
                 String[] configSplit = configArr.split(",");
-                System.out.println("config:" + Arrays.toString(configSplit));
                 for (String kvArr : configSplit) {
                     String[] keyAndValues = kvArr.split("=");
                     configMap.put(keyAndValues[0], keyAndValues[1]);
                 }
-                //configMap.put("StrictHostKeyChecking", "No");
-                details.setConfig(configMap);
             }
+            details = new ServerDetails(prop.getProperty("remoteHost"), Integer.parseInt(prop.getProperty("port")), Integer.parseInt(prop.getProperty("timeout")), prop.getProperty("username"), prop.getProperty("password"), configMap);
 
             // init session pool
             StackSessionPool.getInstance().setMax(5);
