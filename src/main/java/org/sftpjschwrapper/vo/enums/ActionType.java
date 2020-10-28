@@ -1,12 +1,18 @@
-package vo.enums;
+package org.sftpjschwrapper.vo.enums;
 
 public enum ActionType implements EnumI {
     isConnected(0),
     closeConnection(1),
+    getHomePath(2),
+    isRemoteFileExists(3),
+    isRemoteDirExists(4),
+    makeDirectories(5),
     downloadFile(11),
     batchDownloadFiles(111),
     uploadFile(22),
-    batchUploadFiles(222);
+    batchUploadFiles(222),
+    changeOwner(33),
+    changeMode(44);
 
     private final int val;
 

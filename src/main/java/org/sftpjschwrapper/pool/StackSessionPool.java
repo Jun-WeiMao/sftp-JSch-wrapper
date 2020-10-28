@@ -1,9 +1,9 @@
-package pool;
+package org.sftpjschwrapper.pool;
 
 import com.jcraft.jsch.Session;
 import org.apache.commons.pool.KeyedObjectPool;
 import org.apache.commons.pool.impl.StackKeyedObjectPool;
-import pool.vo.ServerDetails;
+import org.sftpjschwrapper.pool.vo.ServerDetails;
 
 public class StackSessionPool {
     private int max;

@@ -1,4 +1,4 @@
-package utils;
+package org.sftpjschwrapper.utils;
 
 public class CommonUtils {
 
@@ -20,6 +20,14 @@ public class CommonUtils {
      */
     public String appendSlash(String s) {
         return s.endsWith("/") ? s : s + "/";
+    }
+
+    /**
+     * @param s string to modify
+     * @return string start with slash
+     */
+    public String startWithSlash(String s) {
+        return s.startsWith("/") ? s : "/" + s;
     }
 
 }
