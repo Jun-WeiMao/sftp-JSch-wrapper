@@ -1,19 +1,19 @@
-package pool;
+package org.sftpjschwrapper.pool;
 
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.Session;
 import org.apache.commons.pool.KeyedObjectPool;
 import org.junit.Assert;
 import org.junit.Test;
-import pool.vo.ServerDetails;
+import org.sftpjschwrapper.pool.vo.ServerDetails;
 
 import java.io.InputStream;
 import java.util.*;
 
-public class PoolTest {
+public class StackSessionPoolTest {
 
     @Test
-    public void testSFTP() throws Exception {
+    public void getPool() throws Exception {
         Session session = null;
         ChannelSftp channelSftp = null;
         KeyedObjectPool<ServerDetails, Session> sessionPool = null;
@@ -44,11 +44,11 @@ public class PoolTest {
                 details.setConfig(configMap);
             }
 
-            // init session pool
+            // init session org.sftpjschwrapper.pool
             StackSessionPool.getInstance().setMax(5);
             sessionPool = StackSessionPool.getInstance().getPool();
 
-            // request session from pool
+            // request session from org.sftpjschwrapper.pool
             session = sessionPool.borrowObject(details);
             Assert.assertTrue(session.isConnected());
 
@@ -67,15 +67,15 @@ public class PoolTest {
                 }
             }
 
-            // return session to pool
+            // return session to org.sftpjschwrapper.pool
             sessionPool.returnObject(details, session);
 
             // sleep a while and check if session alive
-            System.out.println();
+            /*System.out.println();
             for (int i = 1; i <= 910; i++) {
                 System.out.println(String.format("Sleep...[%s]", i));
                 Thread.sleep(1000);
-            }
+            }*/
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -85,14 +85,13 @@ public class PoolTest {
                 Assert.assertFalse(channelSftp.isConnected());
             }
             if (session != null) {
-                // session is connected before return pool
+                // session is connected before return org.sftpjschwrapper.pool
                 Assert.assertTrue(session.isConnected());
 
-                // close pool
+                // close org.sftpjschwrapper.pool
                 sessionPool.close();
                 Assert.assertFalse(session.isConnected());
             }
         }
     }
-
 }
