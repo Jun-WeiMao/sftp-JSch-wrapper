@@ -1,38 +1,25 @@
 package org.sftpjschwrapper.pool.vo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class ServerDetails {
+    private String remoteHost;
+    private Integer port;
+    private String knownHosts;
+    private Integer timeout;
+    private String username;
+    private String password;
+    private Map<String, String> config;
 
-    private final static Logger log = LoggerFactory.getLogger(ServerDetails.class);
-
-    String remoteHost;
-    Integer port;
-    String knownHosts;
-    Integer timeout;
-    String username;
-    String password;
-    Map<String, String> config;
-
-    public ServerDetails(String remoteHost, Integer port, Integer timeout, String username, String password, Map<String, String> config) {
+    public ServerDetails(String remoteHost, String username, String password) {
         this.remoteHost = remoteHost;
-        if (port == null) {
-            port = 22;
-        }
-        this.port = port;
-        if (timeout == null) {
-            timeout = 10000;
-        }
-        this.timeout = timeout;
         this.username = username;
         this.password = password;
-        this.config = config;
-        log.info(this.toString());
+        port = 22;
+        timeout = 10000;
     }
 
     public String getRemoteHost() {

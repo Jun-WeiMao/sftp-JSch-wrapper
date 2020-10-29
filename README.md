@@ -32,12 +32,17 @@ Javadoc is coming soon.
 
 ```java
     // Prepare server details
-    // port, default value 22
-    // timeout, default value 10000
+    ServerDetails details = new ServerDetails("remoteHost", "username", "password");
+    
+    // Custom port, default value 22
+    details.setPort(2222);
+    
+    // Custom timeout, default value 10000
+    details.setTimeout(5000);
+    
+    // Extra config
     Map<String, String> configMap = new HashMap<String, String>();
     configMap.put("StrictHostKeyChecking", "No");
-
-    ServerDetails details = new ServerDetails("remoteHost", port, timeout, "username", "password", configMap);
 ```
 
 ### Init session pool

@@ -6,11 +6,18 @@ import org.apache.commons.pool.KeyedObjectPool;
 import org.junit.Assert;
 import org.junit.Test;
 import org.sftpjschwrapper.pool.vo.ServerDetails;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Vector;
 
 public class StackSessionPoolTest {
+
+    private static final Logger log = LoggerFactory.getLogger(StackSessionPoolTest.class);
 
     @Test
     public void getPool() throws Exception {
@@ -23,7 +30,6 @@ public class StackSessionPoolTest {
             // load properties from resource(test)
             is = this.getClass().getClassLoader().getResourceAsStream("test.properties");
             prop.load(is);
-
             Map<String, String> configMap = new HashMap<String, String>();
             String configArr = prop.getProperty("config");
             if (configArr != null && !configArr.isEmpty()) {
@@ -34,7 +40,10 @@ public class StackSessionPoolTest {
                 }
                 configMap.put("StrictHostKeyChecking", "No");
             }
-            ServerDetails details = new ServerDetails(prop.getProperty("remoteHost"), Integer.parseInt(prop.getProperty("port")), Integer.parseInt(prop.getProperty("timeout")), prop.getProperty("username"), prop.getProperty("password"), configMap);
+
+            ServerDetails details = new ServerDetails(prop.getProperty("remoteHost"), prop.getProperty("username"), prop.getProperty("password"));
+            details.setConfig(configMap);
+            log.info(details.toString());
 
             // init session org.sftpjschwrapper.pool
             StackSessionPool.getInstance().setMax(5);

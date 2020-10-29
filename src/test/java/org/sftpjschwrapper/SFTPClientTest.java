@@ -5,8 +5,11 @@ import org.apache.commons.pool.KeyedObjectPool;
 import org.junit.*;
 import org.junit.rules.TestName;
 import org.sftpjschwrapper.pool.StackSessionPool;
+import org.sftpjschwrapper.pool.StackSessionPoolTest;
 import org.sftpjschwrapper.pool.vo.ServerDetails;
 import org.sftpjschwrapper.vo.SFTPResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.InputStream;
@@ -15,6 +18,8 @@ import java.util.*;
 
 @FixMethodOrder
 public class SFTPClientTest {
+
+    private static final Logger log = LoggerFactory.getLogger(SFTPClientTest.class);
 
     @Rule
     public TestName name = new TestName();
@@ -42,7 +47,9 @@ public class SFTPClientTest {
                     configMap.put(keyAndValues[0], keyAndValues[1]);
                 }
             }
-            details = new ServerDetails(prop.getProperty("remoteHost"), Integer.parseInt(prop.getProperty("port")), Integer.parseInt(prop.getProperty("timeout")), prop.getProperty("username"), prop.getProperty("password"), configMap);
+            details = new ServerDetails(prop.getProperty("remoteHost"), prop.getProperty("username"), prop.getProperty("password"));
+            details.setConfig(configMap);
+            log.info(details.toString());
 
             // init session pool
             StackSessionPool.getInstance().setMax(5);
