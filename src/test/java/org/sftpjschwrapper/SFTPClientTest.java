@@ -262,6 +262,7 @@ public class SFTPClientTest {
     @AfterClass
     public static void tearDown() throws Exception {
         sftpClient.disconnect();
+        session.disconnect();
         sessionPool.returnObject(details, session);
     }
 
