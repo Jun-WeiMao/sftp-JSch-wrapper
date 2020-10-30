@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@FixMethodOrder
 public class SFTPClientTest {
 
     private static final Logger log = LoggerFactory.getLogger(SFTPClientTest.class);
