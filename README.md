@@ -5,10 +5,6 @@ The sftp-JSch-wrapper (SJW) library it's a wrapper based on JSch (JCraft, lnc.) 
 
 It's currently compiled on Java 6.
 
-## :warning: Not available yet!!!
-
-It's an ongoing project, will release first soon.  
-
 ## Installation
 
 Binaries aren't deployed on Maven Central yet, so will need to add as an external jar.
