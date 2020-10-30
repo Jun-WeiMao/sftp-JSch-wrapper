@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -44,7 +45,7 @@ public class SFTPClient {
     public SFTPResult isConnected() {
         SFTPResult result = new SFTPResult(ActionType.isConnected, null, null);
         if (channelSftp == null) {
-            result.setErrMsg(new NullPointerException("ChannelSftp is null, fail to connection testing.").getMessage());
+            result.setErrMsg("ChannelSftp is null, fail to connection testing.");
         } else {
             result.setSuccess(channelSftp.isConnected());
         }
@@ -72,7 +73,7 @@ public class SFTPClient {
                 result.setErrMsg(e.getMessage());
             }
         } else {
-            result.setErrMsg(new NullPointerException("ChannelSftp is null, fail to get home path.").getMessage());
+            result.setErrMsg("ChannelSftp is null, fail to get home path.");
         }
         log.info(result.toString());
         return home;
@@ -81,7 +82,7 @@ public class SFTPClient {
     public SFTPResult isRemoteFileExists(File remoteFile) {
         SFTPResult result = new SFTPResult(ActionType.isRemoteFileExists, null, remoteFile.getAbsolutePath());
         if (channelSftp == null) {
-            result.setErrMsg(new NullPointerException("ChannelSftp is null, fail to check file existence.").getMessage());
+            result.setErrMsg("ChannelSftp is null, fail to check file existence.");
         } else {
             try {
                 SftpATTRS sftpATTRS = channelSftp.lstat(remoteFile.getAbsolutePath());
@@ -100,7 +101,7 @@ public class SFTPClient {
     public SFTPResult isRemoteDirExists(File remoteDir, boolean doCreate) {
         SFTPResult result = new SFTPResult(ActionType.isRemoteDirExists, null, remoteDir.getAbsolutePath());
         if (channelSftp == null) {
-            result.setErrMsg(new NullPointerException("ChannelSftp is null, fail to check dir existence.").getMessage());
+            result.setErrMsg("ChannelSftp is null, fail to check dir existence.");
         } else {
             try {
                 SftpATTRS sftpATTRS = channelSftp.lstat(remoteDir.getAbsolutePath());
@@ -127,7 +128,7 @@ public class SFTPClient {
         StringBuilder fullPath = new StringBuilder(dirs[0].isEmpty() ? "/" : dirs[0]);
         int lastIdx = dirs.length - 1;
         if (channelSftp == null) {
-            result.setErrMsg(new NullPointerException("ChannelSftp is null, fail to make dir.").getMessage());
+            result.setErrMsg("ChannelSftp is null, fail to make dir.");
         } else {
             try {
                 for (int i = 1; i < dirs.length; i++) {
@@ -153,7 +154,7 @@ public class SFTPClient {
     public List<LsEntry> dirList(File targetDir, boolean fileOnly) {
         List<LsEntry> result = new ArrayList<LsEntry>();
         if (channelSftp == null) {
-            log.error(new NullPointerException("ChannelSftp is null, fail to list dir.").getMessage());
+            log.error("ChannelSftp is null, fail to list dir.");
         } else {
             try {
                 // check dir exists
@@ -205,7 +206,7 @@ public class SFTPClient {
     public SFTPResult getFile(File remoteFile, File localFile) {
         SFTPResult result = new SFTPResult(ActionType.downloadFile, remoteFile.getAbsolutePath(), localFile.getAbsolutePath());
         if (channelSftp == null) {
-            result.setErrMsg(new NullPointerException("ChannelSftp is null, fail to get file.").getMessage());
+            result.setErrMsg("ChannelSftp is null, fail to get file.");
         } else {
             try {
                 // check remote file exist
@@ -265,8 +266,7 @@ public class SFTPClient {
     public SFTPResult putFile(File localFile, File remoteFile) {
         SFTPResult result = new SFTPResult(ActionType.uploadFile, localFile.getAbsolutePath(), remoteFile.getAbsolutePath());
         if (channelSftp == null) {
-            result.setErrMsg(new NullPointerException("ChannelSftp is null, fail to put file.").getMessage());
-
+            result.setErrMsg("ChannelSftp is null, fail to put file.");
         } else {
             try {
                 // check local file exist
@@ -280,7 +280,6 @@ public class SFTPClient {
                 result.setSuccess(true);
             } catch (Exception e) {
                 result.setErrMsg(e.getMessage());
-
             }
         }
         log.info(result.toString());
@@ -319,8 +318,7 @@ public class SFTPClient {
     public SFTPResult chown(int userId, int groupId, File target, boolean isDir) {
         SFTPResult result = new SFTPResult(ActionType.changeOwner, null, target.getAbsolutePath());
         if (channelSftp == null) {
-            result.setErrMsg(new NullPointerException("ChannelSftp is null, fail to chown.").getMessage());
-
+            result.setErrMsg("ChannelSftp is null, fail to chown.");
         } else {
             try {
                 // check target exists
@@ -339,7 +337,6 @@ public class SFTPClient {
                 result.setSuccess(true);
             } catch (Exception e) {
                 result.setErrMsg(e.getMessage());
-
             }
         }
         log.info(result.toString());
@@ -349,7 +346,7 @@ public class SFTPClient {
     public SFTPResult chmod(String permissionOctal, File target, boolean isDir) {
         SFTPResult result = new SFTPResult(ActionType.changeMode, null, target.getAbsolutePath());
         if (channelSftp == null) {
-            result.setErrMsg(new NullPointerException("ChannelSftp is null, fail to chmod.").getMessage());
+            result.setErrMsg("ChannelSftp is null, fail to chmod.");
         } else {
             try {
                 // check target exists
@@ -376,7 +373,7 @@ public class SFTPClient {
     public SFTPResult rename(File oldPath, File newPath, boolean isDir) {
         SFTPResult result = new SFTPResult(ActionType.rename, oldPath.getAbsolutePath(), newPath.getAbsolutePath());
         if (channelSftp == null) {
-            result.setErrMsg(new NullPointerException("ChannelSftp is null, fail to rename.").getMessage());
+            result.setErrMsg("ChannelSftp is null, fail to rename.");
         } else {
             try {
                 // check old file exists and new path parent exists
@@ -404,7 +401,7 @@ public class SFTPClient {
         SFTPResult result = new SFTPResult(ActionType.remove, null, target.getAbsolutePath());
         boolean doLog = true;
         if (channelSftp == null) {
-            result.setErrMsg(new NullPointerException("ChannelSftp is null, fail to rename.").getMessage());
+            result.setErrMsg("ChannelSftp is null, fail to remove.");
         } else {
             try {
                 if (isDir) {
@@ -438,8 +435,117 @@ public class SFTPClient {
         return result;
     }
 
-    //TODO setMtime
-    //TODO setStat
-    //TODO symlink
+    public SFTPResult setModifyTime(File targetFile, boolean isDir, long newModifyTime) {
+        SFTPResult result = new SFTPResult(ActionType.setModifyTime, null, targetFile.getAbsolutePath());
+        if (channelSftp == null) {
+            result.setErrMsg("ChannelSftp is null, fail to set modify time.");
+        } else {
+            try {
+                SFTPResult checkResult;
+                if (isDir) {
+                    checkResult = isRemoteDirExists(targetFile, false);
+                } else {
+                    checkResult = isRemoteFileExists(targetFile);
+                }
+                if (!checkResult.isSuccess()) {
+                    throw new FileNotFoundException("Remote file or dir is not exists.");
+                }
+                channelSftp.setMtime(targetFile.getAbsolutePath(), Integer.parseInt(String.valueOf(newModifyTime / 1000L)));
+                result.setCommand("touch -d " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(newModifyTime));
+                result.setSuccess(true);
+            } catch (Exception e) {
+                result.setErrMsg(e.getMessage());
+            }
+        }
+        log.info(result.toString());
+        return result;
+    }
+
+    public SFTPResult symlink(boolean isDir, File oldPath, File newPath) {
+        SFTPResult result = new SFTPResult(ActionType.symlink, oldPath.getAbsolutePath(), newPath.getAbsolutePath());
+        if (channelSftp == null) {
+            result.setErrMsg("ChannelSftp is null, fail to modify symlink.");
+        } else {
+            try {
+                // Check file exists
+                SFTPResult checkResult;
+                if (isDir) {
+                    checkResult = isRemoteDirExists(oldPath, false);
+                } else {
+                    checkResult = isRemoteFileExists(oldPath);
+                }
+                if (!checkResult.isSuccess()) {
+                    throw new FileNotFoundException("Remote file or dir is not exists.");
+                }
+                channelSftp.symlink(oldPath.getAbsolutePath(), newPath.getAbsolutePath());
+                result.setSuccess(true);
+            } catch (Exception e) {
+                result.setErrMsg(e.getMessage());
+            }
+        }
+        log.info(result.toString());
+        return result;
+    }
+
+    public SftpATTRS getStat(boolean isDir, File targetFile) {
+        SftpATTRS result = null;
+        if (channelSftp != null) {
+            try {
+                SFTPResult checkResult;
+                if (isDir) {
+                    checkResult = isRemoteDirExists(targetFile, false);
+                } else {
+                    checkResult = isRemoteFileExists(targetFile);
+                }
+                if (!checkResult.isSuccess()) {
+                    throw new FileNotFoundException("Remote file or dir is not exists.");
+                }
+                result = channelSftp.lstat(targetFile.getAbsolutePath());
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
+        }
+        if (result != null) {
+            log.info("[stat] target:" + targetFile.getAbsolutePath() + " " + result.toString());
+        }
+        return result;
+    }
+
+    public SFTPResult setStat(boolean isDir, File targetFile, SftpATTRS newAttrs) {
+        SFTPResult result = new SFTPResult(ActionType.setStatus, null, targetFile.getAbsolutePath());
+        if (channelSftp == null) {
+            result.setErrMsg("ChannelSftp is null, fail to modify status.");
+        } else {
+            try {
+                SFTPResult checkResult;
+                if (isDir) {
+                    checkResult = isRemoteDirExists(targetFile, false);
+                } else {
+                    checkResult = isRemoteFileExists(targetFile);
+                }
+                if (!checkResult.isSuccess()) {
+                    throw new FileNotFoundException("Remote file or dir is not exists.");
+                }
+                channelSftp.setStat(targetFile.getAbsolutePath(), newAttrs);
+            } catch (Exception e) {
+                result.setErrMsg(e.getMessage());
+            }
+            if (isSftpATTRSEquals(newAttrs, getStat(isDir, targetFile))) {
+                result.setOutput(getStat(isDir, targetFile).toString());
+                result.setSuccess(true);
+                result.setErrMsg(null);
+            }
+        }
+        log.info(result.toString());
+        return result;
+    }
+
+    private boolean isSftpATTRSEquals(SftpATTRS attrs1, SftpATTRS attrs2) {
+        return attrs1.getGId() == attrs2.getGId()
+                && attrs1.getATime() == attrs2.getATime()
+                && attrs1.getMTime() == attrs2.getMTime()
+                && attrs1.getSize() == attrs2.getSize()
+                && attrs1.getPermissions() == attrs2.getPermissions();
+    }
 
 }

@@ -77,14 +77,14 @@ public class SFTPResult {
 
     @Override
     public String toString() {
-        ActionType[] transFilesType = {ActionType.downloadFile, ActionType.batchDownloadFiles, ActionType.uploadFile, ActionType.batchUploadFiles, ActionType.rename};
+        ActionType[] transFilesType = {ActionType.downloadFile, ActionType.batchDownloadFiles, ActionType.uploadFile, ActionType.batchUploadFiles, ActionType.rename, ActionType.symlink};
         String transFiles = "\n" +
                 "[     Action] " + actionType.name() + "\n" +
                 "[Trans. flow] " + sourcePath + " => " + destPath + "\n" +
                 "[     Result] " + (success ? "SUCCESS" : "FAIL") + "\n" +
                 "[  Error msg] " + (errMsg != null ? errMsg : "");
 
-        ActionType[] execCmdType = {ActionType.changeOwner, ActionType.changeMode, ActionType.makeDirectories, ActionType.remove};
+        ActionType[] execCmdType = {ActionType.changeOwner, ActionType.changeMode, ActionType.makeDirectories, ActionType.remove, ActionType.setModifyTime};
         String execCmd = "\n" +
                 "[     Action] " + actionType.name() + "\n" +
                 "[Cmd. target] " + (command != null ? command + " " + destPath : "") + "\n" +

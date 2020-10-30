@@ -2,6 +2,7 @@ package org.sftpjschwrapper;
 
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.Session;
+import com.jcraft.jsch.SftpATTRS;
 import org.apache.commons.pool.KeyedObjectPool;
 import org.junit.*;
 import org.junit.rules.TestName;
@@ -16,7 +17,6 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@FixMethodOrder
 public class SFTPClientTest {
 
     private static final Logger log = LoggerFactory.getLogger(SFTPClientTest.class);
@@ -208,6 +208,54 @@ public class SFTPClientTest {
         File targetFile = new File(remoteHome + "/delDir");
         sftpClient.remove(targetFile, true);
         Assert.assertFalse(sftpClient.isRemoteDirExists(new File(remoteDest.getAbsolutePath() + "/" + localDir.getName()), false).isSuccess());
+    }
+
+    @Test
+    public void setModifyTime() {
+        File targetFile = new File(remoteHome + "/test2");
+        long newTime = System.currentTimeMillis();
+        sftpClient.setModifyTime(targetFile, true, newTime);
+        List<ChannelSftp.LsEntry> files = sftpClient.dirList(new File(remoteHome), false);
+        if (!files.isEmpty()) {
+            for (ChannelSftp.LsEntry file : files) {
+                if (file.getAttrs().isDir() && "test2".equals(file.getFilename())) {
+                    Assert.assertEquals(file.getAttrs().getMTime(), Integer.parseInt(String.valueOf(newTime / 1000L)));
+                    break;
+                }
+            }
+        }
+    }
+
+    @Test
+    public void symlink() {
+        File oldPath = new File(remoteHome + "/test");
+        File newPath = new File(remoteHome + "/symlinkTest");
+        sftpClient.symlink(true, oldPath, newPath);
+        List<ChannelSftp.LsEntry> files = sftpClient.dirList(new File(remoteHome), false);
+        if (!files.isEmpty()) {
+            for (ChannelSftp.LsEntry file : files) {
+                if ("symlinkTest".equals(file.getFilename())) {
+                    Assert.assertTrue(file.getAttrs().isLink());
+                    break;
+                }
+            }
+        }
+    }
+
+    @Test
+    public void getStat() {
+        File targetPath = new File(remoteHome + "/test");
+        Assert.assertTrue(sftpClient.getStat(true, targetPath).isDir());
+    }
+
+    @Test
+    public void setStat() {
+        File targetFile = new File(remoteHome + "/test");
+        int newTime = (int) (System.currentTimeMillis() / 1000L);
+        SftpATTRS attrs = sftpClient.getStat(true, targetFile);
+        attrs.setACMODTIME(newTime, attrs.getMTime());
+        sftpClient.setStat(true, targetFile, attrs);
+        Assert.assertEquals(sftpClient.getStat(true, targetFile).getATime(), newTime);
     }
 
     @AfterClass

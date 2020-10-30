@@ -14,7 +14,10 @@ public enum ActionType implements EnumI {
     changeOwner(33),
     changeMode(44),
     rename(55),
-    remove(66);
+    remove(66),
+    setModifyTime(77),
+    symlink(88),
+    setStatus(99);
 
     private final int val;
 
