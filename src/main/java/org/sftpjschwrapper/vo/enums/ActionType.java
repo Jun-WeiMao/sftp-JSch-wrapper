@@ -12,7 +12,9 @@ public enum ActionType implements EnumI {
     uploadFile(22),
     batchUploadFiles(222),
     changeOwner(33),
-    changeMode(44);
+    changeMode(44),
+    rename(55),
+    remove(66);
 
     private final int val;
 
