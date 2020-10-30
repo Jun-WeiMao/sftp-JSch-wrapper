@@ -69,8 +69,11 @@ Javadoc is coming soon.
 ### Return session to pool
 
 ```java
-    // Disconnect with host
+    // Disconnect channel
     sftpClient.disconnect();
+    
+    // Disconnect session
+    session.disconnect();
 
     // Return to pool
     pool.returnObject(details, session);
