@@ -16,19 +16,18 @@ currentVer=$(less VERSION)
 
 read -erp "Version for this build? " -i "$currentVer" newVer
 
+if [ -f "VERSION" ]; then
+    echo "$newVer" > VERSION
+fi
+
 echo ""
 echo "[START] Gradle clean Ver.$newVer"
 gradle clean -Pversion="$newVer"
 echo ""
 
-echo ""
 echo "[START] Gradle build Ver.$newVer"
 gradle build -Pversion="$newVer"
 echo ""
-
-if [ -f "VERSION" ]; then
-    echo "$newVer" > VERSION
-fi
 
 [[ -d "out" ]] || mkdir "out"
 
