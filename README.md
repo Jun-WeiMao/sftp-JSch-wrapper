@@ -43,6 +43,7 @@ Javadoc is coming soon.
     // Extra config
     Map<String, String> configMap = new HashMap<String, String>();
     configMap.put("StrictHostKeyChecking", "No");
+    details.setConfig(configMap);
 ```
 
 ### Init session pool
