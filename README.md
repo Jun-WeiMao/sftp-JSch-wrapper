@@ -19,9 +19,7 @@ Check CHANGES.md for migration path between versions.
 
 ## Basics
 
-Javadoc is coming soon.
-
-[//]: # "Feel free to check the [Javadoc](url) or the code for more information."
+Feel free to check the [Javadoc](https://jun-weimao.github.io/sftp-JSch-wrapper/) or the code for more information.
 
 ## SFTP
 ### Prepare target host details
