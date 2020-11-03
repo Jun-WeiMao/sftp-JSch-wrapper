@@ -1,5 +1,8 @@
 package org.sftpjschwrapper.utils;
 
+/**
+ * Utils class.
+ */
 public class CommonUtils {
 
     private static CommonUtils commonUtils;
@@ -7,6 +10,11 @@ public class CommonUtils {
     private CommonUtils() {
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the CommonUtils instance
+     */
     public static CommonUtils getInstance() {
         if (commonUtils == null) {
             commonUtils = new CommonUtils();
@@ -15,6 +23,8 @@ public class CommonUtils {
     }
 
     /**
+     * Append slash string.
+     *
      * @param s string to modify
      * @return string with slash appended
      */
@@ -23,6 +33,8 @@ public class CommonUtils {
     }
 
     /**
+     * Start with slash string.
+     *
      * @param s string to modify
      * @return string start with slash
      */

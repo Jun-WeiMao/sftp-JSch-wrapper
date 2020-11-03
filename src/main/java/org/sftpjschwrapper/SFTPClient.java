@@ -15,17 +15,20 @@ import java.util.*;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
- * sftp client
- *
- * @author John.Mao
+ * Sftp client provide implementation of data manipulation via sftp protocol.
  */
 @SuppressWarnings("unused")
 public class SFTPClient {
     private static final Logger log = getLogger(SFTPClient.class);
     private static final CommonUtils utils = CommonUtils.getInstance();
 
-    ChannelSftp channelSftp;
+    private ChannelSftp channelSftp;
 
+    /**
+     * Instantiates a new Sftp client.
+     *
+     * @param session the session
+     */
     public SFTPClient(Session session) {
         try {
             if (session == null) {
@@ -42,6 +45,11 @@ public class SFTPClient {
         }
     }
 
+    /**
+     * Is connected.
+     *
+     * @return the sftp result
+     */
     public SFTPResult isConnected() {
         SFTPResult result = new SFTPResult(ActionType.isConnected, null, null);
         if (channelSftp == null) {
@@ -53,6 +61,9 @@ public class SFTPClient {
         return result;
     }
 
+    /**
+     * Disconnect.
+     */
     public void disconnect() {
         if (channelSftp != null) {
             if (channelSftp.isConnected())
@@ -60,6 +71,12 @@ public class SFTPClient {
         }
     }
 
+    /**
+     * Gets home path.
+     *
+     * @param userName the user name on host
+     * @return the home path
+     */
     public String getHomePath(String userName) {
         SFTPResult result = new SFTPResult(ActionType.getHomePath, null, null);
         String home = null;
@@ -79,6 +96,12 @@ public class SFTPClient {
         return home;
     }
 
+    /**
+     * Is remote file exists.
+     *
+     * @param remoteFile the remote file
+     * @return the sftp result
+     */
     public SFTPResult isRemoteFileExists(File remoteFile) {
         SFTPResult result = new SFTPResult(ActionType.isRemoteFileExists, null, remoteFile.getAbsolutePath());
         if (channelSftp == null) {
@@ -98,6 +121,13 @@ public class SFTPClient {
         return result;
     }
 
+    /**
+     * Is remote directory exists.
+     *
+     * @param remoteDir the remote directory
+     * @param doCreate  true will create it when not exists
+     * @return the sftp result
+     */
     public SFTPResult isRemoteDirExists(File remoteDir, boolean doCreate) {
         SFTPResult result = new SFTPResult(ActionType.isRemoteDirExists, null, remoteDir.getAbsolutePath());
         if (channelSftp == null) {
@@ -122,6 +152,12 @@ public class SFTPClient {
         return result;
     }
 
+    /**
+     * Make directory with parent.
+     *
+     * @param targetDir the target directory
+     * @return the sftp result
+     */
     public SFTPResult mkdirWithParent(File targetDir) {
         SFTPResult result = new SFTPResult(ActionType.makeDirectories, null, targetDir.getAbsolutePath());
         String[] dirs = utils.startWithSlash(targetDir.getAbsolutePath()).split("/");
@@ -150,6 +186,13 @@ public class SFTPClient {
         return result;
     }
 
+    /**
+     * List the directory exclude nested directory.
+     *
+     * @param targetDir the target directory
+     * @param fileOnly  true will only show the type is file
+     * @return the list
+     */
     @SuppressWarnings("unchecked")
     public List<LsEntry> dirList(File targetDir, boolean fileOnly) {
         List<LsEntry> result = new ArrayList<LsEntry>();
@@ -189,6 +232,12 @@ public class SFTPClient {
         return result;
     }
 
+    /**
+     * List the directory include nested directory.
+     *
+     * @param targetDir the target dir
+     * @return the map<pathOfTheList, list>
+     */
     public Map<String, List<LsEntry>> dirListAll(File targetDir) {
         Map<String, List<LsEntry>> result = new HashMap<String, List<LsEntry>>();
         List<LsEntry> files = dirList(targetDir, false);
@@ -203,6 +252,13 @@ public class SFTPClient {
         return result;
     }
 
+    /**
+     * Gets file.
+     *
+     * @param remoteFile the remote file
+     * @param localFile  the local file
+     * @return the sftp result
+     */
     public SFTPResult getFile(File remoteFile, File localFile) {
         SFTPResult result = new SFTPResult(ActionType.downloadFile, remoteFile.getAbsolutePath(), localFile.getAbsolutePath());
         if (channelSftp == null) {
@@ -229,11 +285,23 @@ public class SFTPClient {
         return result;
     }
 
-    //Same structure as remote
+    /**
+     * Gets full directory with nested directory and files.
+     *
+     * @param remoteDir the remote directory
+     * @return the sftp result
+     */
     public SFTPResult getDir(File remoteDir) {
         return getDir(remoteDir, new File("/"));
     }
 
+    /**
+     * Gets directory.
+     *
+     * @param remoteDir the remote directory
+     * @param localDest the local destination
+     * @return the sftp result
+     */
     public SFTPResult getDir(File remoteDir, File localDest) {
         SFTPResult result = new SFTPResult(ActionType.batchDownloadFiles, remoteDir.getAbsolutePath(), localDest.getAbsolutePath());
         // Create local dest dir if not exists
@@ -263,6 +331,13 @@ public class SFTPClient {
         return result;
     }
 
+    /**
+     * Put file.
+     *
+     * @param localFile  the local file
+     * @param remoteFile the remote file
+     * @return the sftp result
+     */
     public SFTPResult putFile(File localFile, File remoteFile) {
         SFTPResult result = new SFTPResult(ActionType.uploadFile, localFile.getAbsolutePath(), remoteFile.getAbsolutePath());
         if (channelSftp == null) {
@@ -286,11 +361,23 @@ public class SFTPClient {
         return result;
     }
 
-    //Same structure as local
+    /**
+     * Put directory.
+     *
+     * @param localDir the local directory
+     * @return the sftp result
+     */
     public SFTPResult putDir(File localDir) {
         return putDir(localDir, new File("/"));
     }
 
+    /**
+     * Put directory.
+     *
+     * @param localDir   the local directory
+     * @param remoteDest the remote destination
+     * @return the sftp result
+     */
     public SFTPResult putDir(File localDir, File remoteDest) {
         SFTPResult result = new SFTPResult(ActionType.batchUploadFiles, localDir.getAbsolutePath(), remoteDest.getAbsolutePath());
         if (!localDir.exists() && !localDir.isDirectory()) {
@@ -315,6 +402,15 @@ public class SFTPClient {
         return result;
     }
 
+    /**
+     * Chown.
+     *
+     * @param userId  the user id
+     * @param groupId the group id
+     * @param target  the target
+     * @param isDir   true if the target is directory
+     * @return the sftp result
+     */
     public SFTPResult chown(int userId, int groupId, File target, boolean isDir) {
         SFTPResult result = new SFTPResult(ActionType.changeOwner, null, target.getAbsolutePath());
         if (channelSftp == null) {
@@ -343,6 +439,14 @@ public class SFTPClient {
         return result;
     }
 
+    /**
+     * Chmod.
+     *
+     * @param permissionOctal the permission string in octal format (ex:0777)
+     * @param target          the target
+     * @param isDir           true if the target is directory
+     * @return the sftp result
+     */
     public SFTPResult chmod(String permissionOctal, File target, boolean isDir) {
         SFTPResult result = new SFTPResult(ActionType.changeMode, null, target.getAbsolutePath());
         if (channelSftp == null) {
@@ -370,6 +474,14 @@ public class SFTPClient {
         return result;
     }
 
+    /**
+     * Rename.
+     *
+     * @param oldPath the old path
+     * @param newPath the new path
+     * @param isDir   true if the target is directory
+     * @return the sftp result
+     */
     public SFTPResult rename(File oldPath, File newPath, boolean isDir) {
         SFTPResult result = new SFTPResult(ActionType.rename, oldPath.getAbsolutePath(), newPath.getAbsolutePath());
         if (channelSftp == null) {
@@ -397,6 +509,13 @@ public class SFTPClient {
         return result;
     }
 
+    /**
+     * Remove.
+     *
+     * @param target the target
+     * @param isDir  true if the target is directory
+     * @return the sftp result
+     */
     public SFTPResult remove(File target, boolean isDir) {
         SFTPResult result = new SFTPResult(ActionType.remove, null, target.getAbsolutePath());
         boolean doLog = true;
@@ -435,22 +554,30 @@ public class SFTPClient {
         return result;
     }
 
-    public SFTPResult setModifyTime(File targetFile, boolean isDir, long newModifyTime) {
-        SFTPResult result = new SFTPResult(ActionType.setModifyTime, null, targetFile.getAbsolutePath());
+    /**
+     * Sets modify time.
+     *
+     * @param target        the target
+     * @param isDir         true if the target is directory
+     * @param newModifyTime the new modify time
+     * @return the sftp result
+     */
+    public SFTPResult setModifyTime(File target, boolean isDir, long newModifyTime) {
+        SFTPResult result = new SFTPResult(ActionType.setModifyTime, null, target.getAbsolutePath());
         if (channelSftp == null) {
             result.setErrMsg("ChannelSftp is null, fail to set modify time.");
         } else {
             try {
                 SFTPResult checkResult;
                 if (isDir) {
-                    checkResult = isRemoteDirExists(targetFile, false);
+                    checkResult = isRemoteDirExists(target, false);
                 } else {
-                    checkResult = isRemoteFileExists(targetFile);
+                    checkResult = isRemoteFileExists(target);
                 }
                 if (!checkResult.isSuccess()) {
                     throw new FileNotFoundException("Remote file or dir is not exists.");
                 }
-                channelSftp.setMtime(targetFile.getAbsolutePath(), Integer.parseInt(String.valueOf(newModifyTime / 1000L)));
+                channelSftp.setMtime(target.getAbsolutePath(), Integer.parseInt(String.valueOf(newModifyTime / 1000L)));
                 result.setCommand("touch -d " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(newModifyTime));
                 result.setSuccess(true);
             } catch (Exception e) {
@@ -461,6 +588,14 @@ public class SFTPClient {
         return result;
     }
 
+    /**
+     * Symlink.
+     *
+     * @param isDir   true if the target is directory
+     * @param oldPath the old path
+     * @param newPath the new path
+     * @return the sftp result
+     */
     public SFTPResult symlink(boolean isDir, File oldPath, File newPath) {
         SFTPResult result = new SFTPResult(ActionType.symlink, oldPath.getAbsolutePath(), newPath.getAbsolutePath());
         if (channelSftp == null) {
@@ -487,51 +622,66 @@ public class SFTPClient {
         return result;
     }
 
-    public SftpATTRS getStat(boolean isDir, File targetFile) {
+    /**
+     * Gets stat.
+     *
+     * @param isDir  true if the target is directory
+     * @param target the target
+     * @return the SftpATTRS
+     */
+    public SftpATTRS getStat(boolean isDir, File target) {
         SftpATTRS result = null;
         if (channelSftp != null) {
             try {
                 SFTPResult checkResult;
                 if (isDir) {
-                    checkResult = isRemoteDirExists(targetFile, false);
+                    checkResult = isRemoteDirExists(target, false);
                 } else {
-                    checkResult = isRemoteFileExists(targetFile);
+                    checkResult = isRemoteFileExists(target);
                 }
                 if (!checkResult.isSuccess()) {
                     throw new FileNotFoundException("Remote file or dir is not exists.");
                 }
-                result = channelSftp.lstat(targetFile.getAbsolutePath());
+                result = channelSftp.lstat(target.getAbsolutePath());
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
         }
         if (result != null) {
-            log.info("[stat] target:" + targetFile.getAbsolutePath() + " " + result.toString());
+            log.info("[stat] target:" + target.getAbsolutePath() + " " + result.toString());
         }
         return result;
     }
 
-    public SFTPResult setStat(boolean isDir, File targetFile, SftpATTRS newAttrs) {
-        SFTPResult result = new SFTPResult(ActionType.setStatus, null, targetFile.getAbsolutePath());
+    /**
+     * Sets stat.
+     *
+     * @param isDir    true if the target is directory
+     * @param target   the target
+     * @param newAttrs the new attrs
+     * @return the sftp result
+     */
+    public SFTPResult setStat(boolean isDir, File target, SftpATTRS newAttrs) {
+        SFTPResult result = new SFTPResult(ActionType.setStatus, null, target.getAbsolutePath());
         if (channelSftp == null) {
             result.setErrMsg("ChannelSftp is null, fail to modify status.");
         } else {
             try {
                 SFTPResult checkResult;
                 if (isDir) {
-                    checkResult = isRemoteDirExists(targetFile, false);
+                    checkResult = isRemoteDirExists(target, false);
                 } else {
-                    checkResult = isRemoteFileExists(targetFile);
+                    checkResult = isRemoteFileExists(target);
                 }
                 if (!checkResult.isSuccess()) {
                     throw new FileNotFoundException("Remote file or dir is not exists.");
                 }
-                channelSftp.setStat(targetFile.getAbsolutePath(), newAttrs);
+                channelSftp.setStat(target.getAbsolutePath(), newAttrs);
             } catch (Exception e) {
                 result.setErrMsg(e.getMessage());
             }
-            if (isSftpATTRSEquals(newAttrs, getStat(isDir, targetFile))) {
-                result.setOutput(getStat(isDir, targetFile).toString());
+            if (isSftpATTRSEquals(newAttrs, getStat(isDir, target))) {
+                result.setOutput(getStat(isDir, target).toString());
                 result.setSuccess(true);
                 result.setErrMsg(null);
             }
